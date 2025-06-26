@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Чат-бот</title>
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value;
+            input.value = '';
+            
+            addMessage(message, false);
+            
+            const response = await fetch('/bot/api/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: message})
+            });
+            
+            const data = await response.json();
+            addMessage(data.response, true);
+        }
+        
+        function addMessage(text, isBot) {
+            const chat = document.getElementById('chat');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = isBot ? 'bot-message' : 'user-message';
+            msgDiv.textContent = text;
+            chat.appendChild(msgDiv);
+            chat.scrollTop = chat.scrollHeight;
+        }
+    </script>
+    <style>
+        #chat { height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; }
+        .user-message { text-align: right; color: blue; }
+        .bot-message { text-align: left; color: green; }
+    </style>
+</head>
+<body>
+    <div id="chat"></div>
+    <input type="text" id="message-input" placeholder="Введите сообщение...">
+    <button onclick="sendMessage()">Отправить</button>
+    
+    <script>
+        // Инициализация приветственного сообщения
+        window.onload = function() {
+            addMessage("{{ welcome_message }}", true);
+        };
+    </script>
+</body>
+</html>
