@@ -18,7 +18,6 @@ def handle_message(user_message, current_state):
             return show_main_menu(), BotState.MENU
     
     elif current_state == BotState.APPOINTMENT:
-        # Здесь можно сохранить данные в БД
         return f"Спасибо! Данные '{user_message}' сохранены. Чем еще помочь?\n" + show_main_menu(), BotState.MENU
     
     return show_main_menu(), BotState.MENU

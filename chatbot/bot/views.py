@@ -11,19 +11,16 @@ def chat_api(request):
         data = json.loads(request.body)
         user_message = data.get('message')
         session = request.session
-        
-        # Инициализация состояния
+    
         if 'bot_state' not in session:
             session['bot_state'] = BotState.MENU
             session.save()
         
-        # Обработка сообщения
         response_text, new_state = handle_message(
             user_message, 
             session['bot_state']
         )
         
-        # Обновление состояния
         session['bot_state'] = new_state
         session.save()
         
